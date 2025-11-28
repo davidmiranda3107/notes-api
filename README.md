@@ -71,6 +71,61 @@ java -jar target/notes-api-0.0.1-SNAPSHOT.jar
 
 ---
 
+## Unit Testing with JUnit & Mockito
+
+This project now includes a full suite of automated unit tests using JUnit 5, Mockito, MockMvc, and Spring Boot Test.
+The tests cover the repository, service, and controller layers to ensure the reliability of all CRUD operations and search functionality.
+
+You can run all tests using:
+
+```bash
+mvn test
+```
+
+---
+
+## Maven Build Improvements (Suppressing JVM Warnings)
+
+The pom.xml has been updated to include additional Maven plugins that eliminate console warnings such as:
+
+- Sharing is only supported for boot loader classes
+- Dynamic loading of agents will be disallowed by default in a future release
+
+The following plugins were added:
+
+```mvn
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.9.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>properties</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.4</version>
+            <configuration>
+                <argLine>@{argLine} -Xshare:off -javaagent:${org.mockito:mockito-core:jar}</argLine>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
+```
+
+These changes ensure cleaner test execution and better compatibility with future JVM versions.
+
+---
+
 ## Future improvements
 
 - Add authentication and role-based access
